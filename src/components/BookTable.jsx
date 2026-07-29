@@ -156,14 +156,22 @@ export default function BookTable({ books, onIssue, onEdit, onDelete }) {
                       {confirmDeleteId === book.id ? (
                         <div className="flex items-center gap-1">
                           <button
-                            onClick={() => { onDelete(book.id); setConfirmDeleteId(null); }}
-                            className="px-2 py-1 text-xs bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors"
+                            onClick={() => {
+                              try {
+                                onDelete(book.id);
+                                setConfirmDeleteId(null);
+                              } catch (err) {
+                                alert(err.message);
+                                setConfirmDeleteId(null);
+                              }
+                            }}
+                            className="px-2 py-1 text-xs bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors cursor-pointer"
                           >
                             Confirm
                           </button>
                           <button
                             onClick={() => setConfirmDeleteId(null)}
-                            className="px-2 py-1 text-xs text-text-dim hover:text-text transition-colors"
+                            className="px-2 py-1 text-xs text-text-dim hover:text-text transition-colors cursor-pointer"
                           >
                             Cancel
                           </button>

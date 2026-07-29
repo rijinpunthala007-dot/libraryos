@@ -82,11 +82,15 @@ export function useLibraryData() {
   }, [books]);
 
   const deleteBook = useCallback((bookId) => {
+    const book = books.find(b => b.id === bookId);
+    if (book && book.totalCopies !== book.availableCopies) {
+      throw new Error(`Cannot delete "${book.title}" because it is currently issued to a borrower.`);
+    }
     setBooks(prev => prev.filter(b => b.id !== bookId));
     setTransactions(prev =>
       prev.filter(t => t.bookId !== bookId)
     );
-  }, []);
+  }, [books]);
 
   const updateBook = useCallback((bookId, updatedData) => {
     // Check duplicate ISBN (excluding this book itself)
