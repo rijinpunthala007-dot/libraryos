@@ -88,6 +88,39 @@ export function useLibraryData() {
     );
   }, []);
 
+  const updateBook = useCallback((bookId, updatedData) => {
+    // Check duplicate ISBN (excluding this book itself)
+    const isDuplicate = books.some(other => other.id !== bookId && other.isbn.trim() === updatedData.isbn.trim());
+    if (isDuplicate) {
+      throw new Error("ISBN already exists in the inventory");
+    }
+
+    setBooks(prev =>
+      prev.map(b => {
+        if (b.id !== bookId) return b;
+
+        const newTotal = parseInt(updatedData.totalCopies, 10);
+        const issued = b.totalCopies - b.availableCopies;
+
+        if (newTotal < issued) {
+          throw new Error(`Total copies cannot be less than currently issued copies (${issued})`);
+        }
+
+        const difference = newTotal - b.totalCopies;
+        const newAvailable = Math.max(0, b.availableCopies + difference);
+
+        return {
+          ...b,
+          title: updatedData.title.trim(),
+          author: updatedData.author.trim(),
+          isbn: updatedData.isbn.trim(),
+          totalCopies: newTotal,
+          availableCopies: newAvailable,
+        };
+      })
+    );
+  }, [books]);
+
   const resetAllData = useCallback(() => {
     setBooks(SEED_BOOKS);
     setTransactions([]);
@@ -176,6 +209,7 @@ export function useLibraryData() {
     stats,
     addBook,
     deleteBook,
+    updateBook,
     issueBook,
     returnBook,
     calcFinePreview,

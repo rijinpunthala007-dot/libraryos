@@ -6,6 +6,7 @@ import BookTable from './components/BookTable';
 import AddBookForm from './components/AddBookForm';
 import IssueBookModal from './components/IssueBookModal';
 import ReturnBookModal from './components/ReturnBookModal';
+import EditBookModal from './components/EditBookModal';
 import { BookOpenIcon, PlusIcon, ClockIcon, ReturnIcon } from './components/Icons';
 
 function TransactionRow({ tx, getBook, getSimulatedNow }) {
@@ -55,6 +56,7 @@ export default function App() {
   const [page, setPage] = useState('dashboard');
   const [issueBook, setIssueBook] = useState(null);   // book object to issue
   const [showReturn, setShowReturn] = useState(false);
+  const [editBook, setEditBook] = useState(null);
 
   return (
     <div className="min-h-screen" style={{
@@ -155,6 +157,7 @@ export default function App() {
               <BookTable
                 books={lib.books}
                 onIssue={(book) => setIssueBook(book)}
+                onEdit={(book) => setEditBook(book)}
                 onDelete={lib.deleteBook}
               />
             </section>
@@ -264,6 +267,15 @@ export default function App() {
           calcFinePreview={lib.calcFinePreview}
           onReturn={lib.returnBook}
           onClose={() => setShowReturn(false)}
+        />
+      )}
+
+      {/* Edit Book Modal */}
+      {editBook && (
+        <EditBookModal
+          book={editBook}
+          onUpdate={lib.updateBook}
+          onClose={() => setEditBook(null)}
         />
       )}
     </div>

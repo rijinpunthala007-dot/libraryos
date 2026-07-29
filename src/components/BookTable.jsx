@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SearchIcon, FilterIcon, TrashIcon, ArrowDownIcon } from './Icons';
+import { SearchIcon, FilterIcon, TrashIcon, ArrowDownIcon, PencilIcon } from './Icons';
 
 function StatusBadge({ available, total }) {
   if (available === 0) return <span className="badge-out">● Out of Stock</span>;
@@ -7,7 +7,7 @@ function StatusBadge({ available, total }) {
   return <span className="badge-available">● Available</span>;
 }
 
-export default function BookTable({ books, onIssue, onDelete }) {
+export default function BookTable({ books, onIssue, onEdit, onDelete }) {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
   const [sortField, setSortField] = useState('title');
@@ -144,6 +144,14 @@ export default function BookTable({ books, onIssue, onDelete }) {
                         title={book.availableCopies === 0 ? 'No copies available' : 'Issue this book'}
                       >
                         Issue
+                      </button>
+                      <button
+                        id={`edit-btn-${book.id}`}
+                        onClick={() => onEdit(book)}
+                        className="inline-flex items-center justify-center p-1.5 rounded-lg text-text-muted border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] hover:text-text transition-all duration-200 cursor-pointer"
+                        title="Edit book details"
+                      >
+                        <PencilIcon className="w-3.5 h-3.5" />
                       </button>
                       {confirmDeleteId === book.id ? (
                         <div className="flex items-center gap-1">
