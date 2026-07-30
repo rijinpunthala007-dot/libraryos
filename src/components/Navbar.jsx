@@ -63,14 +63,14 @@ export default function Navbar({
       {/* ── Main navbar bar ── */}
       <nav className="bg-[#FAF9F6] border-b-[3px] border-[#8B0000] font-sans">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-14 sm:h-16">
 
             {/* Logo */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-shrink-0">
               <div className="p-1.5 rounded bg-[#8B0000] flex items-center justify-center">
-                <LibraryIcon className="w-5 h-5 text-[#FAF9F6]" />
+                <LibraryIcon className="w-4 h-4 sm:w-5 sm:h-5 text-[#FAF9F6]" />
               </div>
-              <span className="font-serif font-bold text-[#2C3E50] text-lg tracking-tight select-none">
+              <span className="font-serif font-bold text-[#2C3E50] text-base sm:text-lg tracking-tight select-none">
                 LibraryOS
               </span>
             </div>
@@ -94,7 +94,7 @@ export default function Navbar({
             </div>
 
             {/* Right-side actions */}
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-1.5 sm:gap-2.5">
               <NotificationCenter
                 transactions={transactions}
                 getBook={getBook}
@@ -104,7 +104,7 @@ export default function Navbar({
               <button
                 id="nav-issue-btn"
                 onClick={onIssueClick}
-                className="bg-[#8B0000] hover:bg-[#6B0000] text-[#FAF9F6] font-medium px-2.5 sm:px-4 py-2 rounded text-xs border border-[#8B0000] hover:border-[#6B0000] transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                className="bg-[#8B0000] hover:bg-[#6B0000] text-[#FAF9F6] font-medium px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded text-xs border border-[#8B0000] hover:border-[#6B0000] transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer whitespace-nowrap"
               >
                 Issue<span className="hidden sm:inline"> Book</span>
               </button>
@@ -112,7 +112,7 @@ export default function Navbar({
               <button
                 id="nav-return-btn"
                 onClick={onReturnClick}
-                className="bg-[#8B0000] hover:bg-[#6B0000] text-[#FAF9F6] font-medium px-2.5 sm:px-4 py-2 rounded text-xs border border-[#8B0000] hover:border-[#6B0000] transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center gap-1 sm:gap-1.5"
+                className="bg-[#8B0000] hover:bg-[#6B0000] text-[#FAF9F6] font-medium px-2 sm:px-3.5 py-1.5 sm:py-2 rounded text-xs border border-[#8B0000] hover:border-[#6B0000] transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center gap-1 sm:gap-1.5 whitespace-nowrap"
               >
                 <ReturnIcon className="w-3.5 h-3.5 text-current" />
                 <span className="hidden sm:inline">Return</span>
@@ -127,7 +127,7 @@ export default function Navbar({
                   className={`relative p-1.5 rounded transition-all duration-200 cursor-pointer border ${
                     devOpen
                       ? 'bg-[#8B0000]/10 border-[#8B0000]/30 text-[#8B0000]'
-                      : 'border-transparent text-[#2C3E50]/50 hover:text-[#2C3E50] hover:bg-[#8B0000]/5 hover:border-[#8B0000]/20'
+                      : 'border-transparent text-[#2C3E50]/60 hover:text-[#2C3E50] hover:bg-[#8B0000]/5 hover:border-[#8B0000]/20'
                   }`}
                   aria-expanded={devOpen}
                   aria-label="Toggle developer tools"
@@ -145,16 +145,16 @@ export default function Navbar({
             </div>
           </div>
 
-          {/* Mobile nav links */}
-          <div className="md:hidden flex flex-wrap gap-1 pb-3">
+          {/* Mobile nav links - Single horizontal scrollable bar */}
+          <div className="md:hidden flex items-center gap-1.5 overflow-x-auto no-scrollbar py-2 border-t border-[#8B0000]/10 -mx-4 px-4">
             {links.map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
                 onClick={() => onNavigate(id)}
-                className={`flex items-center gap-1 px-2.5 py-1.5 rounded text-xs font-medium transition-all duration-200 cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer whitespace-nowrap flex-shrink-0 ${
                   activePage === id
-                    ? 'bg-[#8B0000]/10 text-[#8B0000] font-semibold'
-                    : 'text-[#2C3E50]/80 hover:bg-[#8B0000]/5 hover:text-[#8B0000]'
+                    ? 'bg-[#8B0000] text-[#FAF9F6] font-semibold shadow-sm'
+                    : 'bg-[#8B0000]/5 text-[#2C3E50]/80 hover:bg-[#8B0000]/10 hover:text-[#8B0000]'
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
@@ -162,6 +162,7 @@ export default function Navbar({
               </button>
             ))}
           </div>
+
         </div>
       </nav>
 
