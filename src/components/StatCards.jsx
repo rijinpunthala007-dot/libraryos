@@ -1,40 +1,34 @@
-import { BookOpenIcon, CheckCircleIcon, ClockIcon, SparklesIcon } from './Icons';
+import { BookOpenIcon, CheckCircleIcon, ClockIcon } from './Icons';
 
 function StatCard({ label, value, subtitle, variant = 'indigo', icon: Icon }) {
-  const variants = {
-    indigo: 'stat-card-indigo',
-    teal: 'stat-card-teal',
-    amber: 'stat-card-amber',
+  const borders = {
+    indigo: 'border-l-[4px] border-l-academic-burgundy border-y border-r border-academic-border',
+    teal: 'border-l-[4px] border-l-academic-forest border-y border-r border-academic-border',
+    amber: 'border-l-[4px] border-l-academic-gold border-y border-r border-academic-border',
   };
 
   return (
     <div
-      className={`${variants[variant]} rounded-2xl p-6 flex flex-col gap-3 relative overflow-hidden group transition-transform duration-300 hover:-translate-y-1`}
+      className={`${borders[variant]} bg-white rounded shadow-[0_2px_8px_rgba(0,0,0,0.08)] p-6 flex flex-col gap-3 relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-md`}
     >
-      {/* Background shimmer */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-        style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 50%)' }}
-      />
-
-      {/* Icon */}
+      {/* Icon Row */}
       <div className="flex items-center justify-between">
-        <div className="p-2.5 rounded-xl bg-white/20 backdrop-blur-sm">
-          {Icon && <Icon className="w-6 h-6 text-white" />}
+        <div className="p-2 rounded bg-academic-hover text-academic-gray flex items-center justify-center border border-academic-border/30">
+          {Icon && <Icon className="w-6 h-6" />}
         </div>
-        <SparklesIcon className="w-4 h-4 text-white/40" />
       </div>
 
-      {/* Value */}
+      {/* Value & Label */}
       <div>
-        <p className="text-4xl font-bold text-white tracking-tight leading-none">
+        <p className="text-4xl font-serif font-bold text-academic-charcoal tracking-tight leading-none">
           {value.toLocaleString()}
         </p>
-        <p className="text-white/80 font-medium text-sm mt-1">{label}</p>
+        <p className="text-academic-charcoal font-semibold text-sm mt-2">{label}</p>
       </div>
 
       {/* Subtitle */}
       {subtitle && (
-        <p className="text-white/60 text-xs">{subtitle}</p>
+        <p className="text-academic-gray text-xs">{subtitle}</p>
       )}
     </div>
   );
@@ -42,7 +36,7 @@ function StatCard({ label, value, subtitle, variant = 'indigo', icon: Icon }) {
 
 export default function StatCards({ stats }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
       <StatCard
         label="Total Books"
         value={stats.totalBooks}

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { XMarkIcon, BookOpenIcon } from './Icons';
 
 const FIELDS = [
   { name: 'title', label: 'Book Title', placeholder: 'e.g. The Great Gatsby', type: 'text' },
@@ -8,7 +7,17 @@ const FIELDS = [
   { name: 'totalCopies', label: 'Total Copies', placeholder: 'e.g. 5', type: 'number' },
 ];
 
-const empty = { title: '', author: '', isbn: '', totalCopies: '' };
+const GENRES = ['Literature', 'Science', 'History', 'Social Sciences', 'Philosophy', 'General'];
+const CONDITIONS = ['Mint', 'Good', 'Worn', 'Damaged'];
+const COLORS = [
+  { hex: '#8B0000', label: 'Crimson Burgundy' },
+  { hex: '#1B4332', label: 'Forest Green' },
+  { hex: '#1E3A8A', label: 'Oxford Blue' },
+  { hex: '#D4A574', label: 'Warm Gold' },
+  { hex: '#4B5563', label: 'Slate Gray' },
+];
+
+const empty = { title: '', author: '', isbn: '', totalCopies: '', genre: 'Literature', condition: 'Good', spineColor: '#8B0000' };
 
 export default function AddBookForm({ onAdd, onCancel }) {
   const [form, setForm] = useState(empty);
@@ -41,34 +50,39 @@ export default function AddBookForm({ onAdd, onCancel }) {
         setForm(empty);
         setErrors({});
         setSuccess(false);
-      }, 1800);
+        // Auto-navigate back to catalog after successful add
+        if (onCancel) onCancel();
+      }, 1600);
     } catch (err) {
       setErrors({ isbn: err.message });
     }
   };
 
   return (
-    <div className="glass-card p-6 animate-slide-up">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl stat-card-indigo">
-            <BookOpenIcon className="w-5 h-5 text-white" />
-          </div>
-          <div>
-            <h2 className="text-lg font-semibold text-text">Add New Book</h2>
-            <p className="text-xs text-text-dim mt-0.5">Add a new title to the library collection</p>
-          </div>
-        </div>
+    <div className="glass-card p-6 bg-white border border-academic-border rounded shadow-sm">
+      {/* Header with Back Button */}
+      <div className="flex items-center gap-3.5 mb-6 border-b border-academic-border pb-4">
         {onCancel && (
-          <button onClick={onCancel} className="p-2 rounded-lg hover:bg-white/[0.06] text-text-dim hover:text-text transition-colors">
-            <XMarkIcon className="w-5 h-5" />
+          <button
+            type="button"
+            onClick={onCancel}
+            className="p-2 rounded hover:bg-academic-hover text-academic-charcoal border border-academic-border bg-white cursor-pointer transition-all duration-200 flex items-center justify-center hover:-translate-x-0.5 active:translate-x-0"
+            title="Back to Catalog"
+            aria-label="Back to Catalog"
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
           </button>
         )}
+        <div className="flex-1">
+          <h2 className="text-lg font-serif font-bold text-academic-charcoal">Add New Book</h2>
+          <p className="text-xs text-academic-gray mt-0.5">Add a new title to the library collection</p>
+        </div>
       </div>
 
       {success && (
-        <div className="mb-4 px-4 py-3 rounded-xl bg-teal-500/10 border border-teal-500/20 text-teal-300 text-sm flex items-center gap-2 animate-fade-in">
+        <div className="mb-4 px-4 py-3 rounded bg-academic-lightGreen border border-academic-forest/20 text-academic-forest text-sm font-semibold flex items-center gap-2 animate-fade-in">
           <span>✓</span> Book added successfully!
         </div>
       )}
@@ -77,7 +91,7 @@ export default function AddBookForm({ onAdd, onCancel }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {FIELDS.map(f => (
             <div key={f.name} className={f.name === 'title' ? 'sm:col-span-2' : ''}>
-              <label htmlFor={`field-${f.name}`} className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">
+              <label htmlFor={`field-${f.name}`} className="block text-xs font-semibold text-academic-charcoal uppercase tracking-wider mb-1.5">
                 {f.label}
               </label>
               <input
@@ -88,13 +102,67 @@ export default function AddBookForm({ onAdd, onCancel }) {
                 value={form[f.name]}
                 onChange={handleChange}
                 min={f.type === 'number' ? 1 : undefined}
-                className={`glass-input w-full text-sm ${errors[f.name] ? 'border-red-500/50 ring-2 ring-red-500/20' : ''}`}
+                className={`glass-input w-full text-sm bg-white border border-academic-border ${errors[f.name] ? 'border-academic-burgundy ring-2 ring-academic-burgundy/15' : ''}`}
               />
               {errors[f.name] && (
-                <p className="text-xs text-red-400 mt-1">{errors[f.name]}</p>
+                <p className="text-xs text-academic-burgundy font-semibold mt-1">{errors[f.name]}</p>
               )}
             </div>
           ))}
+
+          {/* Genre field */}
+          <div>
+            <label htmlFor="field-genre" className="block text-xs font-semibold text-academic-charcoal uppercase mb-1.5">
+              Subject Genre
+            </label>
+            <select
+              id="field-genre"
+              name="genre"
+              value={form.genre}
+              onChange={handleChange}
+              className="glass-input w-full text-sm bg-white border border-academic-border focus:outline-none"
+            >
+              {GENRES.map(g => <option key={g} value={g}>{g}</option>)}
+            </select>
+          </div>
+
+          {/* Condition field */}
+          <div>
+            <label htmlFor="field-condition" className="block text-xs font-semibold text-academic-charcoal uppercase mb-1.5">
+              Book Condition
+            </label>
+            <select
+              id="field-condition"
+              name="condition"
+              value={form.condition}
+              onChange={handleChange}
+              className="glass-input w-full text-sm bg-white border border-academic-border focus:outline-none"
+            >
+              {CONDITIONS.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
+
+          {/* Spine color field */}
+          <div className="sm:col-span-2">
+            <label htmlFor="field-spineColor" className="block text-xs font-semibold text-academic-charcoal uppercase mb-1.5">
+              Book Spine Binding Color
+            </label>
+            <div className="flex gap-3 items-center">
+              <select
+                id="field-spineColor"
+                name="spineColor"
+                value={form.spineColor}
+                onChange={handleChange}
+                className="glass-input flex-1 text-sm bg-white border border-academic-border focus:outline-none"
+              >
+                {COLORS.map(c => <option key={c.hex} value={c.hex}>{c.label}</option>)}
+              </select>
+              <div
+                className="w-10 h-10 border border-academic-border rounded shadow-sm transition-all duration-300"
+                style={{ backgroundColor: form.spineColor }}
+              />
+            </div>
+          </div>
         </div>
 
         <div className="flex gap-3 pt-2">
@@ -102,7 +170,11 @@ export default function AddBookForm({ onAdd, onCancel }) {
             Add Book to Library
           </button>
           {onCancel && (
-            <button type="button" onClick={onCancel} className="btn-ghost">
+            <button
+              type="button"
+              onClick={onCancel}
+              className="px-4 py-2.5 rounded text-sm font-medium text-academic-charcoal border border-academic-border bg-white hover:bg-academic-hover transition-colors cursor-pointer"
+            >
               Cancel
             </button>
           )}

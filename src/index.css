@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+/* Google Fonts are loaded via <link> in index.html — no duplicate import needed here */
 
 @tailwind base;
 @tailwind components;
@@ -17,8 +17,10 @@
 
   body {
     margin: 0;
-    background-color: #111827;
-    color: #F3F4F6;
+    background-color: #FAF9F6;
+    color: #2C3E50;
+    background-image: radial-gradient(rgba(212, 197, 185, 0.15) 1px, transparent 0);
+    background-size: 24px 24px;
   }
 
   #root {
@@ -29,103 +31,230 @@
   }
 
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
   }
   ::-webkit-scrollbar-track {
-    background: #111827;
+    background: #FAF9F6;
   }
   ::-webkit-scrollbar-thumb {
-    background: #374151;
-    border-radius: 3px;
+    background: #D4C5B9;
+    border-radius: 4px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #4B5563;
+    background: #C3B2A4;
   }
 }
 
 @layer components {
   .glass-card {
-    @apply bg-white/[0.04] backdrop-blur-glass border border-white/[0.08] rounded-xl;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 8px 32px rgba(0,0,0,0.3);
+    background-color: #FFFFFF;
+    border: 1px solid #D4C5B9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   }
 
   .glass-input {
-    @apply bg-white/[0.06] border border-white/[0.1] rounded-lg px-4 py-2.5 text-text placeholder-text-dim focus:outline-none focus:border-brand-primary/60 focus:ring-2 focus:ring-brand-primary/20 transition-all duration-200;
-    backdrop-filter: blur(8px);
+    background-color: #FFFFFF;
+    border: 1px solid #D4C5B9;
+    border-radius: 6px;
+    padding: 0.625rem 1rem;
+    min-height: 2.75rem; /* 44px — WCAG touch target */
+    color: #2C3E50;
+    transition: all 0.2s ease-in-out;
+    width: 100%;
+  }
+  .glass-input:focus {
+    outline: none;
+    border-color: #8B0000;
+    box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.15);
   }
 
   .btn-primary {
-    @apply inline-flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm text-white transition-all duration-200;
-    background: linear-gradient(135deg, #2563EB, #3B82F6);
-    box-shadow: 0 2px 12px rgba(59,130,246,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    min-height: 2.75rem; /* 44px — WCAG touch target */
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: #FAF9F6;
+    background-color: #8B0000;
+    border: 1px solid #8B0000;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
   }
   .btn-primary:hover {
-    box-shadow: 0 4px 20px rgba(59,130,246,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
+    background-color: #A30000;
+    border-color: #A30000;
     transform: translateY(-1px);
   }
   .btn-primary:active {
     transform: translateY(0);
   }
   .btn-primary:disabled {
-    @apply opacity-40 cursor-not-allowed;
+    opacity: 0.4;
+    cursor: not-allowed;
     transform: none;
-    box-shadow: none;
   }
 
   .btn-danger {
-    @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-red-300 border border-red-500/30 bg-red-500/10 hover:bg-red-500/20 hover:border-red-500/50 transition-all duration-200;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #8B0000;
+    border: 1px solid #FCA5A5;
+    background-color: transparent;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+  }
+  .btn-danger:hover {
+    background-color: #FEE2E2;
+    border-color: #EF4444;
+    color: #A30000;
   }
 
   .btn-success {
-    @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-teal-300 border border-teal-500/30 bg-teal-500/10 hover:bg-teal-500/20 hover:border-teal-500/50 transition-all duration-200;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #8B0000;
+    border: 1px solid #8B0000;
+    background-color: transparent;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+  }
+  .btn-success:hover {
+    background-color: #FAF0EE;
+    color: #A30000;
+    border-color: #A30000;
+  }
+  .btn-success:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background-color: transparent;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm text-text-muted border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] hover:text-text transition-all duration-200;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    min-height: 2.75rem; /* 44px — WCAG touch target */
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: #8B0000;
+    border: 1px solid #8B0000;
+    background-color: transparent;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
   }
-
-  .stat-card-indigo {
-    background: linear-gradient(135deg, #1D4ED8 0%, #3B82F6 60%, #60A5FA 100%);
-    box-shadow: 0 8px 32px rgba(59,130,246,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
-  }
-
-  .stat-card-teal {
-    background: linear-gradient(135deg, #0E7490 0%, #06B6D4 60%, #22D3EE 100%);
-    box-shadow: 0 8px 32px rgba(6,182,212,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
-  }
-
-  .stat-card-amber {
-    background: linear-gradient(135deg, #B45309 0%, #F59E0B 60%, #FCD34D 100%);
-    box-shadow: 0 8px 32px rgba(245,158,11,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+  .btn-ghost:hover {
+    background-color: #FAF0EE;
+    border-color: #A30000;
+    color: #A30000;
   }
 
   .badge-available {
-    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium text-teal-300 bg-teal-500/10 border border-teal-500/20;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.125rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #1B4332;
+    background-color: #DCFCE7;
+    border: 1px solid rgba(27, 67, 50, 0.15);
   }
 
   .badge-out {
-    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium text-red-300 bg-red-500/10 border border-red-500/20;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.125rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #8B0000;
+    background-color: #FEE2E2;
+    border: 1px solid rgba(139, 0, 0, 0.15);
   }
 
   .badge-overdue {
-    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium text-amber-300 bg-amber-500/10 border border-amber-500/20;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.125rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #2C3E50;
+    background-color: #FEF3C7;
+    border: 1px solid rgba(212, 165, 116, 0.3);
   }
 
   .table-row-hover {
-    @apply transition-colors duration-150 hover:bg-brand-primary/5;
+    transition: background-color 150ms ease-in-out;
+  }
+  .table-row-hover:hover {
+    background-color: #F5F0EB;
   }
 
   .modal-backdrop {
-    @apply fixed inset-0 z-50 flex items-center justify-center p-4;
-    background: rgba(6, 14, 32, 0.85);
-    backdrop-filter: blur(8px);
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0.75rem 0.75rem 2rem;
+    background-color: rgba(44, 62, 80, 0.4);
+    backdrop-filter: blur(4px);
+    overflow-y: auto;
+  }
+
+  @media (min-width: 640px) {
+    .modal-backdrop {
+      align-items: center;
+      padding: 1.5rem;
+    }
   }
 
   .modal-panel {
-    @apply w-full max-w-lg rounded-2xl p-6 animate-scale-in max-h-[90vh] overflow-y-auto;
-    background: #1F2937;
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 24px 64px rgba(0,0,0,0.7);
+    width: 100%;
+    /* max-width is set per-modal via Tailwind max-w-* utilities, not here */
+    border-radius: 8px;
+    padding: 1rem;
+    max-height: 92vh;
+    overflow-y: auto;
+    background-color: #FFFFFF;
+    border: 1px solid #D4C5B9;
+    box-shadow: 0 4px 20px rgba(44, 62, 80, 0.15);
+    animation: scaleIn 0.2s ease-out;
+  }
+
+  @media (min-width: 640px) {
+    .modal-panel {
+      padding: 1.5rem;
+      border-radius: 10px;
+    }
+  }
+}
+
+@layer base {
+  @keyframes scaleIn {
+    0% { transform: scale(0.95); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
   }
 }
