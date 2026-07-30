@@ -1,5 +1,15 @@
 import { useState, useRef, useEffect } from 'react';
-import { LibraryIcon, ReturnIcon, BookOpenIcon, ClockIcon, ChartBarIcon, AcademicCapIcon, FolderIcon } from './Icons';
+import {
+  LibraryIcon,
+  ReturnIcon,
+  BookOpenIcon,
+  ClockIcon,
+  ChartBarIcon,
+  AcademicCapIcon,
+  FolderIcon,
+  Bars3Icon,
+  XMarkIcon,
+} from './Icons';
 import NotificationCenter from './NotificationCenter';
 
 function GearIcon({ className }) {
@@ -25,6 +35,7 @@ export default function Navbar({
   onResetData,
 }) {
   const [devOpen, setDevOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const panelRef = useRef(null);
 
   const links = [
@@ -46,6 +57,11 @@ export default function Navbar({
       })
     : null;
 
+  // Close drawer on page navigation
+  useEffect(() => {
+    setDrawerOpen(false);
+  }, [activePage]);
+
   // Close the panel on click outside
   useEffect(() => {
     if (!devOpen) return;
@@ -58,21 +74,45 @@ export default function Navbar({
     return () => document.removeEventListener('mousedown', handleOutside);
   }, [devOpen]);
 
+  // Prevent background scroll when mobile drawer is open
+  useEffect(() => {
+    if (drawerOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [drawerOpen]);
+
   return (
     <div className="sticky top-0 z-40" ref={panelRef}>
       {/* ── Main navbar bar ── */}
-      <nav className="bg-[#FAF9F6] border-b-[3px] border-[#8B0000] font-sans">
-        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav className="bg-[#FAF9F6] border-b-[3px] border-[#8B0000] font-sans shadow-sm">
+        <div className="max-w-screen-xl mx-auto px-3.5 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14 sm:h-16">
 
-            {/* Logo */}
+            {/* Left side: Hamburger button (Mobile) + Logo */}
             <div className="flex items-center gap-2 flex-shrink-0">
-              <div className="p-1.5 rounded bg-[#8B0000] flex items-center justify-center">
-                <LibraryIcon className="w-4 h-4 sm:w-5 sm:h-5 text-[#FAF9F6]" />
+              <button
+                id="mobile-drawer-btn"
+                onClick={() => setDrawerOpen(true)}
+                className="md:hidden p-1.5 rounded text-[#8B0000] hover:bg-[#8B0000]/10 transition-colors cursor-pointer"
+                aria-label="Open side navigation menu"
+                title="Navigation Menu"
+              >
+                <Bars3Icon className="w-5 h-5" />
+              </button>
+
+              <div className="flex items-center gap-2 cursor-pointer" onClick={() => onNavigate('dashboard')}>
+                <div className="p-1.5 rounded bg-[#8B0000] flex items-center justify-center">
+                  <LibraryIcon className="w-4 h-4 sm:w-5 sm:h-5 text-[#FAF9F6]" />
+                </div>
+                <span className="font-serif font-bold text-[#2C3E50] text-base sm:text-lg tracking-tight select-none">
+                  LibraryOS
+                </span>
               </div>
-              <span className="font-serif font-bold text-[#2C3E50] text-base sm:text-lg tracking-tight select-none">
-                LibraryOS
-              </span>
             </div>
 
             {/* Desktop nav links */}
@@ -93,7 +133,7 @@ export default function Navbar({
               ))}
             </div>
 
-            {/* Right-side actions */}
+            {/* Right-side action buttons */}
             <div className="flex items-center gap-1.5 sm:gap-2.5">
               <NotificationCenter
                 transactions={transactions}
@@ -144,27 +184,83 @@ export default function Navbar({
               </div>
             </div>
           </div>
-
-          {/* Mobile nav links - Single horizontal scrollable bar */}
-          <div className="md:hidden flex items-center gap-1.5 overflow-x-auto no-scrollbar py-2 border-t border-[#8B0000]/10 -mx-4 px-4">
-            {links.map(({ id, label, icon: Icon }) => (
-              <button
-                key={id}
-                onClick={() => onNavigate(id)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer whitespace-nowrap flex-shrink-0 ${
-                  activePage === id
-                    ? 'bg-[#8B0000] text-[#FAF9F6] font-semibold shadow-sm'
-                    : 'bg-[#8B0000]/5 text-[#2C3E50]/80 hover:bg-[#8B0000]/10 hover:text-[#8B0000]'
-                }`}
-              >
-                <Icon className="w-3.5 h-3.5" />
-                {label}
-              </button>
-            ))}
-          </div>
-
         </div>
       </nav>
+
+      {/* ── Mobile Side Navigation Drawer ── */}
+      {drawerOpen && (
+        <div className="fixed inset-0 z-50 md:hidden">
+          {/* Backdrop Blur */}
+          <div
+            className="fixed inset-0 bg-[#2C3E50]/40 backdrop-blur-sm transition-opacity duration-300"
+            onClick={() => setDrawerOpen(false)}
+          />
+
+          {/* Side Panel Drawer */}
+          <div className="fixed inset-y-0 left-0 w-72 max-w-[80vw] bg-[#FAF9F6] border-r-2 border-[#8B0000] p-5 shadow-2xl flex flex-col justify-between transform transition-transform duration-300 ease-out z-50">
+            <div>
+              {/* Drawer Header */}
+              <div className="flex items-center justify-between border-b border-[#D4C5B9] pb-4 mb-6">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded bg-[#8B0000] flex items-center justify-center">
+                    <LibraryIcon className="w-5 h-5 text-[#FAF9F6]" />
+                  </div>
+                  <span className="font-serif font-bold text-[#2C3E50] text-lg">LibraryOS</span>
+                </div>
+                <button
+                  onClick={() => setDrawerOpen(false)}
+                  className="p-1.5 rounded hover:bg-[#8B0000]/10 text-[#2C3E50] hover:text-[#8B0000] transition-colors cursor-pointer"
+                  aria-label="Close menu"
+                >
+                  <XMarkIcon className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Navigation Links */}
+              <div className="space-y-1.5">
+                <p className="text-[10px] font-bold text-[#6B7280] uppercase tracking-wider px-3 mb-2">Navigation</p>
+                {links.map(({ id, label, icon: Icon }) => {
+                  const isActive = activePage === id;
+                  return (
+                    <button
+                      key={id}
+                      onClick={() => {
+                        onNavigate(id);
+                        setDrawerOpen(false);
+                      }}
+                      className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-md text-sm font-medium transition-all duration-200 cursor-pointer ${
+                        isActive
+                          ? 'bg-[#8B0000] text-[#FAF9F6] font-semibold shadow-sm'
+                          : 'text-[#2C3E50] hover:bg-[#8B0000]/10 hover:text-[#8B0000]'
+                      }`}
+                    >
+                      <Icon className={`w-4 h-4 ${isActive ? 'text-[#FAF9F6]' : 'text-[#8B0000]'}`} />
+                      <span>{label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Drawer Footer Info */}
+            <div className="border-t border-[#D4C5B9] pt-4 mt-6">
+              <div className="bg-[#F5F0EB] p-3 rounded border border-[#D4C5B9] text-xs space-y-1">
+                <div className="flex justify-between text-[#2C3E50]">
+                  <span className="text-[#6B7280]">Active Loans:</span>
+                  <strong className="font-semibold text-[#8B0000]">
+                    {transactions ? transactions.filter(t => t.status !== 'returned').length : 0}
+                  </strong>
+                </div>
+                <div className="flex justify-between text-[#2C3E50]">
+                  <span className="text-[#6B7280]">System Mode:</span>
+                  <span className="font-medium text-[#1B4332]">Local ERP</span>
+                </div>
+              </div>
+              <p className="text-[10px] text-center text-[#6B7280] mt-3">LibraryOS v1.0.0 • University Portal</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Collapsible Dev-Tools Panel ── */}
       <div
